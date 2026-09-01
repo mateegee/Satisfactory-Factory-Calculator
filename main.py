@@ -21,6 +21,29 @@ from recipes import recipes
 # - Prints out results NOTE: Need to figure out layout format for results.
 # - Collate buildings, final product[s] and power into a total sum.
 
+def alt_check(input_recipe):
+    for recipe in recipes:
+        if recipe == input_recipe:
+            return recipes[recipe]["alt"]
 
+def alt_recipes(input_recipe):
+    output = recipes[input_recipe]["output material"]
+    alternates = []
+    for recipe in recipes:
+        if output == recipes[recipe]["output material"]:
+            alternates.append(recipe)
+    return alternates
 
+def test():
+    recipe = input("Use Reinforced Iron Plates")
+    print(recipes[recipe]["output material"])
+    check = alt_check(recipe)
+    alternates = alt_recipes(recipe)
+    print(f"Alt_Check = {check}")
+    print(f"Alt_Recipes = {alternates}")
+
+def main():
+    recipe = input("What recipe would you like to produce?")
+
+test()
     

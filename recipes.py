@@ -16,6 +16,8 @@ recipes = {
         "input": [30],
         "output": 20,
         "power": CONSTRUCTOR,
+        "alt": True,
+        "output material": "Iron Plates",
     },
     "Screws": {
         "machine": "Constructor",
@@ -24,6 +26,8 @@ recipes = {
         "input": [10],
         "output": 40,
         "power": CONSTRUCTOR,
+        "alt": True,
+        "output material": "Screws",
     },
     "Reinforced Iron Plates": {
         "machine": "Assembler",
@@ -31,6 +35,8 @@ recipes = {
         "by-product": None,
         "input": [30, 60],
         "output": 5,
-        "power": ASSEMBLER
+        "power": ASSEMBLER,
+        "alt": True,
+        "output material": "Reinforced Iron Plates", 
     }
 }

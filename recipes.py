@@ -8,9 +8,23 @@ PACKAGER = 10
 REFINERY = 30
 SMELTER = 4
 
+raw_materials = {
+    "Iron Ingots": {
+            "machine": "Smelter",
+            "materials": ["Iron Ore"],
+            "by-product": None,
+            "input": [30],
+            "output": 30,
+            "power": SMELTER,
+            "alt": True,
+            "output material": "Iron Ingots",
+        }
+}
+
 recipes = {
     "Iron Plates": {
         "machine": "Constructor",
+        "raw materials": ["Iron Ore"],
         "materials": ["Iron Ingots"],
         "by-product": None,
         "input": [30],
@@ -21,6 +35,7 @@ recipes = {
     },
     "Screws": {
         "machine": "Constructor",
+        "raw materials": ["Iron Ore"],
         "materials": ["Iron Rods"],
         "by-product": None,
         "input": [10],
@@ -31,6 +46,7 @@ recipes = {
     },
     "Reinforced Iron Plates": {
         "machine": "Assembler",
+        "raw materials": ["Iron Ore"],
         "materials": ["Iron Plates", "Screws"],
         "by-product": None,
         "input": [30, 60],

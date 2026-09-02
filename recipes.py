@@ -24,7 +24,6 @@ raw_materials = {
 recipes = {
     "Iron Plates": {
         "machine": "Constructor",
-        "raw materials": ["Iron Ore"],
         "materials": ["Iron Ingots"],
         "by-product": None,
         "input": [30],
@@ -35,7 +34,6 @@ recipes = {
     },
     "Screws": {
         "machine": "Constructor",
-        "raw materials": ["Iron Ore"],
         "materials": ["Iron Rods"],
         "by-product": None,
         "input": [10],
@@ -46,7 +44,6 @@ recipes = {
     },
     "Reinforced Iron Plates": {
         "machine": "Assembler",
-        "raw materials": ["Iron Ore"],
         "materials": ["Iron Plates", "Screws"],
         "by-product": None,
         "input": [30, 60],

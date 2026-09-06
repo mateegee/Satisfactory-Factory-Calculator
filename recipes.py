@@ -29,7 +29,8 @@ recipes = {
         "input": [30],
         "output": 20,
         "power": CONSTRUCTOR,
-        "alt": True,
+        "is alt": False,
+        "alts": True,
         "output material": "Iron Plates",
     },
     "Screws": {
@@ -39,7 +40,8 @@ recipes = {
         "input": [10],
         "output": 40,
         "power": CONSTRUCTOR,
-        "alt": True,
+        "is alt": False,
+        "alts": True,
         "output material": "Screws",
     },
     "Reinforced Iron Plates": {
@@ -49,7 +51,19 @@ recipes = {
         "input": [30, 60],
         "output": 5,
         "power": ASSEMBLER,
-        "alt": True,
+        "is alt": False,
+        "alts": True,
         "output material": "Reinforced Iron Plates", 
+    },
+    "Cast Screws": {
+        "machine": "Constructor",
+        "materials": ["Iron Ingots"],
+        "by-product": None,
+        "input": [12.5],
+        "output": 50,
+        "power": CONSTRUCTOR,
+        "is alt": True,
+        "alts": True,
+        "output material": "Screws",
     }
 }

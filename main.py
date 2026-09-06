@@ -35,7 +35,7 @@ def clear():
 def alt_check(input_recipe):
     for recipe in recipes:
         if recipe == input_recipe:
-            return recipes[recipe]["alt"]
+            return recipes[recipe]["alts"]
 
 # Collates all alternate recipes for the inputted base recipe into a list.
 def output_alt_recipes(input_recipe):
@@ -68,3 +68,18 @@ def main():
         clear()
         chosen_recipes = []
 
+        while True:
+            alt_recipe = input(f"Which alternate recipes would you like to use? If there are no more recipes, press Enter.\n Current recipes: {chosen_recipes}\n")
+            clear()
+            if alt_recipe == "":
+                clear()
+                break
+            elif alt_recipe not in recipes:
+                print("Recipe does not exist.")
+                continue
+            elif recipes[alt_recipe]["is alt"] == False:
+                print("Recipe is not an alternate recipe.")
+            else:
+                chosen_recipes.append(alt_recipe)
+
+main()

@@ -31,12 +31,24 @@ base_materials = {
             "input": [30],
             "output": 30,
             "power": SMELTER,
+            "is alt": False,
             "alt": True,
             "output material": "Iron Ingots",
         }
 }
 
 recipes = {
+    "Iron Ingots": {
+        "machine": "Smelter",
+        "materials": ["Iron Ore"],
+        "by-product": None,
+        "input": [30],
+        "output": 30,
+        "power": SMELTER,
+        "is alt": False,
+        "alt": True,
+        "output material": "Iron Ingots",
+    },
     "Iron Plates": {
         "machine": "Constructor",
         "materials": ["Iron Ingots"],
@@ -80,5 +92,16 @@ recipes = {
         "is alt": True,
         "alts": False,
         "output material": "Screws",
-    }
+    },
+    "Iron Rods": {
+            "machine": "Constructor",
+            "materials": ["Iron Ingots"],
+            "by-product": None,
+            "input": [15],
+            "output": 15,
+            "power": CONSTRUCTOR,
+            "is alt": True,
+            "alts": False,
+            "output material": "Iron Rods",
+        }
 }

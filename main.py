@@ -13,15 +13,10 @@ import platform
 
 # Chronological Process:
 # - User provides recipe
-# - Grabs recipe
-# - Checks for alternate recipes
-# - [If true] Asks user which recipe
-# - Checks materials for recipes
-# - [If true] Checks for alternate recipes
-# - [If true] Asks user which recipe
-# - Mathematics for working out raw materials -> inputs
-# - Prints out results NOTE: Need to figure out layout format for results.
-# - Collate buildings, final product[s] and power into a total sum.
+# - User provides alternate recipes
+# - User provides raw inputs
+# - Program determines all recipes used in the process
+# - Program swaps any base recipes for alternate recipes chosen
 
 # Clears the terminal.
 def clear():
@@ -30,31 +25,6 @@ def clear():
         subprocess.run("clear")
     elif os == "Windows":
         subprocess.run("cls")
-
-# Checks if the base recipe has any alternate recipes.
-def alt_check(input_recipe):
-    for recipe in recipes:
-        if recipe == input_recipe:
-            return recipes[recipe]["alts"]
-
-# Collates all alternate recipes for the inputted base recipe into a list.
-def output_alt_recipes(input_recipe):
-    output = recipes[input_recipe]["output material"]
-    alternates = []
-    for recipe in recipes:
-        if output == recipes[recipe]["output material"]:
-            alternates.append(recipe)
-    return alternates
-
-# Collates all alternate recipes for materials of a recipe. Might be irrelevent, may delete.
-def material_alt_recipes(input_recipe):
-    materials = recipes[input_recipe]["materials"]
-    materials_list = []
-    for recipe in recipes:
-        for material in materials:
-            if material == recipes[recipe]["output material"]:
-                materials_list.append(recipe)
-    return materials_list
 
 def main():
     while True:
@@ -113,6 +83,22 @@ def main():
                         raw_materials[raw_input] = raw_input_quantity
                         clear()
                         break
+
+        recipes_required = []
+        recipes_required.extend(recipes[product_recipe]["materials"])
+        recipes_required.append(product_recipe)
+        for recipe in recipes_required:
+            print(recipes_required) #NOTE - debugging
+            recipe_materials = recipes[recipe]["materials"]
+            for material in recipe_materials:
+                if material in recipes_required or material in raw_inputs:
+                    continue
+                else:
+                    recipes_required.append(material)
+
+        print(recipes_required)
+                
+            
 
 
 main()

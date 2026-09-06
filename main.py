@@ -37,11 +37,11 @@ def main():
                 break
             
         clear()
-        chosen_recipes = []
+        chosen_alt_recipes = []
 
         # This block makes the user select any alternate recipes they wish to use in their production line.
         while True: 
-            alt_recipe = input(f"Which alternate recipes would you like to use? If there are no more recipes, press Enter.\n Current recipes: {chosen_recipes}\n").title()
+            alt_recipe = input(f"Which alternate recipes would you like to use? If there are no more recipes, press Enter.\n Current recipes: {chosen_alt_recipes}\n").title()
             clear()
             if alt_recipe == "":
                 clear()
@@ -54,7 +54,7 @@ def main():
                 clear()
                 print("Recipe is not an alternate recipe.")
             else:
-                chosen_recipes.append(alt_recipe)
+                chosen_alt_recipes.append(alt_recipe)
 
         raw_materials = {}
 
@@ -84,19 +84,23 @@ def main():
                         clear()
                         break
 
+        # This block identifies all recipes required for the product recipe, including dependancies.
         recipes_required = []
-        recipes_required.extend(recipes[product_recipe]["materials"])
         recipes_required.append(product_recipe)
         for recipe in recipes_required:
             print(recipes_required) #NOTE - debugging
             recipe_materials = recipes[recipe]["materials"]
             for material in recipe_materials:
-                if material in recipes_required or material in raw_inputs:
-                    continue
-                else:
-                    recipes_required.append(material)
+                for recipe in chosen_alt_recipes:
+                    if material in recipes_required or material in raw_inputs:
+                        continue
+                    elif recipes[material]["output material"] == recipes[recipe]["output material"]:
+                        recipes_required.append(recipe)
+                        continue
+                    else:
+                        recipes_required.append(material)
 
-        print(recipes_required)
+
                 
             
 

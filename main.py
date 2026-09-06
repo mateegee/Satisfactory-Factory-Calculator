@@ -1,4 +1,4 @@
-from recipes import recipes
+from recipes import recipes, raw_inputs
 import subprocess
 import platform
 
@@ -58,9 +58,10 @@ def material_alt_recipes(input_recipe):
 
 def main():
     while True:
-        while True:
-            recipe = input("What recipe would you like to produce?\n")
-            if recipe not in recipes:
+        # This block makes the user select the recipe they wish to produce.
+        while True: 
+            product_recipe = input("What recipe would you like to produce?\n").title()
+            if product_recipe not in recipes:
                 print("\nRecipe does not exist")
             else:
                 break
@@ -68,18 +69,50 @@ def main():
         clear()
         chosen_recipes = []
 
-        while True:
-            alt_recipe = input(f"Which alternate recipes would you like to use? If there are no more recipes, press Enter.\n Current recipes: {chosen_recipes}\n")
+        # This block makes the user select any alternate recipes they wish to use in their production line.
+        while True: 
+            alt_recipe = input(f"Which alternate recipes would you like to use? If there are no more recipes, press Enter.\n Current recipes: {chosen_recipes}\n").title()
             clear()
             if alt_recipe == "":
                 clear()
                 break
             elif alt_recipe not in recipes:
+                clear()
                 print("Recipe does not exist.")
                 continue
             elif recipes[alt_recipe]["is alt"] == False:
+                clear()
                 print("Recipe is not an alternate recipe.")
             else:
                 chosen_recipes.append(alt_recipe)
+
+        raw_materials = {}
+
+        # This block makes the user input raw inputs and their quantities.
+        while True:
+            print("Choose a raw material input. If there are no more raw inputs, press Enter.\nCurrent inputs:\n")
+            for material, quantity in raw_materials.items():
+                print(f"{quantity} {material} per minute.")
+            raw_input = input("\n").title()
+            if raw_input == "":
+                clear()
+                break
+            elif raw_input not in raw_inputs:
+                clear()
+                print("Raw input does not exist.")
+            else:
+                clear()
+                while True:
+                    raw_input_quantity = input(f"How many {raw_input} do you have per minute?\n")
+                    try:
+                        float(raw_input_quantity)
+                    except ValueError:
+                        clear()
+                        print("Please enter a numerical value.")
+                    else:
+                        raw_materials[raw_input] = raw_input_quantity
+                        clear()
+                        break
+
 
 main()

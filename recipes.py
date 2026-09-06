@@ -8,7 +8,22 @@ PACKAGER = 10
 REFINERY = 30
 SMELTER = 4
 
-raw_materials = {
+raw_inputs = [
+    "Bauxite", 
+    "Caterium Ore", 
+    "Coal", 
+    "Copper Ore", 
+    "Crude Oil", 
+    "Iron Ore", 
+    "Limestone", 
+    "Nitrogen Gas", 
+    "Raw Quartz", 
+    "Sam", 
+    "Sulfur", 
+    "Uranium", 
+    "Water"]
+
+base_materials = {
     "Iron Ingots": {
             "machine": "Smelter",
             "materials": ["Iron Ore"],
@@ -63,7 +78,7 @@ recipes = {
         "output": 50,
         "power": CONSTRUCTOR,
         "is alt": True,
-        "alts": True,
+        "alts": False,
         "output material": "Screws",
     }
 }

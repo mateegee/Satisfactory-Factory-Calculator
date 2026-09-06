@@ -46,7 +46,7 @@ def output_alt_recipes(input_recipe):
             alternates.append(recipe)
     return alternates
 
-# Collates all alternate recipes for materials of a recipe.
+# Collates all alternate recipes for materials of a recipe. Might be irrelevent, may delete.
 def material_alt_recipes(input_recipe):
     materials = recipes[input_recipe]["materials"]
     materials_list = []
@@ -70,23 +70,38 @@ def main():
 
         alt = alt_check(recipe) # Checks if the current recipe has any alternate recipes
         if alt == True:
-            alt_recipes = output_alt_recipes(recipe)
+            alt_recipes = output_alt_recipes(recipe) # Finds alternate recipes for the current recipe
             while True:
                 print("Which recipe would you like to use?\n")
                 for item in alt_recipes:
                     print(f">> {item}")
                 pick_recipe = input()
-                if recipe not in alt_recipes:
+                if pick_recipe not in alt_recipes:
                     print("\nRecipe choice is invalid. Please choose from the list.")
                 else:
                     chosen_recipes.append(pick_recipe)
-                    print(chosen_recipes)
+                    break
 
-
-
-
-def test(input_recipe):
-    test_list = output_alt_recipes(input_recipe)
-    print(test_list)
+        materials = recipes[pick_recipe]["materials"] # Collates materials within a recipe
+        chosen_material_recipes = []
+        for material in materials:
+            alt = alt_check(material)
+            if alt == True:
+                alt_recipes = output_alt_recipes(material) # Identifies alt recipes for current material
+                while True:
+                    print(f"Which recipe for {material} would you like to use?\n")
+                    for item in alt_recipes:
+                        print(f">> {item}")
+                    pick_recipe = input()
+                    if pick_recipe not in alt_recipes:
+                        print("\nRecipe choice is invalid. Please choose from the list.")
+                    else:
+                        chosen_material_recipes.append(pick_recipe) # Adds chosen recipe to list of material alternate recipes
+                        break
+        
+        print(chosen_recipes, chosen_material_recipes)
 
 main()
+
+# Okay, gonna change the concept of the program. Ask the user for recipe, ask which alternate recipes want to be use, check base recipe materials 
+# vs alternate recipes and replace materials with base recipes.

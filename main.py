@@ -41,7 +41,7 @@ def main():
 
         # This block makes the user select any alternate recipes they wish to use in their production line.
         while True: 
-            alt_recipe = input(f"Which alternate recipes would you like to use? If there are no more recipes, press Enter.\n Current recipes: {chosen_alt_recipes}\n").title()
+            alt_recipe = input(f"Which alternate recipes would you like to use? If there are no more recipes, press Enter.\nCurrent recipes: {chosen_alt_recipes}\n").title()
             clear()
             if alt_recipe == "":
                 clear()
@@ -72,7 +72,7 @@ def main():
                 print("Raw input does not exist.")
             else:
                 clear()
-                while True:
+                while True: # Start of input quanitity user input.
                     raw_input_quantity = input(f"How many {raw_input} do you have per minute?\n")
                     try:
                         float(raw_input_quantity)

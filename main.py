@@ -37,6 +37,20 @@ def main():
                 break
             
         clear()
+
+         # This block asks the user for the required number of items per minute.
+        while True:
+            items_per_minute = input("How many items per minute would you like to produce?\n")
+            try:
+                float(items_per_minute)
+            except ValueError:
+                clear()
+                print("Please enter a numerical value.")
+            else:
+                items_per_minute = float(items_per_minute)
+                clear()
+                break
+        
         chosen_alt_recipes = []
 
         # This block makes the user select any alternate recipes they wish to use in their production line.
@@ -56,53 +70,81 @@ def main():
             else:
                 chosen_alt_recipes.append(alt_recipe)
 
-        raw_materials = {}
-
-        # This block makes the user input raw inputs and their quantities.
-        while True:
-            print("Choose a raw material input. If there are no more raw inputs, press Enter.\nCurrent inputs:\n")
-            for material, quantity in raw_materials.items():
-                print(f"{quantity} {material} per minute.")
-            raw_input = input("\n").title()
-            if raw_input == "":
-                clear()
-                break
-            elif raw_input not in raw_inputs:
-                clear()
-                print("Raw input does not exist.")
-            else:
-                clear()
-                while True: # Start of input quanitity user input.
-                    raw_input_quantity = input(f"How many {raw_input} do you have per minute?\n")
-                    try:
-                        float(raw_input_quantity)
-                    except ValueError:
-                        clear()
-                        print("Please enter a numerical value.")
-                    else:
-                        raw_materials[raw_input] = raw_input_quantity
-                        clear()
-                        break
-
+        # This block makes the user input raw inputs and their quantities. Currently not used, may be deleted.
+        # while True:
+        #     print("Choose a raw material input. If there are no more raw inputs, press Enter.\nCurrent inputs:\n")
+        #     for material, quantity in raw_materials.items():
+        #         print(f"{quantity} {material} per minute.")
+        #     raw_input = input("\n").title()
+        #     if raw_input == "":
+        #         clear()
+        #         break
+        #     elif raw_input not in raw_inputs:
+        #         clear()
+        #         print("Raw input does not exist.")
+        #     else:
+        #         clear()
+        #         while True: # Start of input quanitity user input.
+        #             raw_input_quantity = input(f"How many {raw_input} do you have per minute?\n")
+        #             try:
+        #                 float(raw_input_quantity)
+        #             except ValueError:
+        #                 clear()
+        #                 print("Please enter a numerical value.")
+        #             else:
+        #                 raw_materials[raw_input] = raw_input_quantity
+        #                 clear()
+        #                 break
+        
         # This block identifies all recipes required for the product recipe, including dependancies.
         recipes_required = []
         recipes_required.append(product_recipe)
+        print(type(items_per_minute))
         for recipe in recipes_required:
             print(recipes_required) #NOTE - debugging
             recipe_materials = recipes[recipe]["materials"]
             for material in recipe_materials:
-                for recipe in chosen_alt_recipes:
+                for alt_recipe in chosen_alt_recipes:
                     if material in recipes_required or material in raw_inputs:
                         continue
-                    elif recipes[material]["output material"] == recipes[recipe]["output material"]:
-                        recipes_required.append(recipe)
+                    elif recipes[material]["output material"] == recipes[alt_recipe]["output material"]:
+                        recipes_required.append(alt_recipe)
                         continue
                     else:
                         recipes_required.append(material)
 
+        machine, multiplier = machine_count(product_recipe, items_per_minute)
+        power = power_usage(product_recipe, multiplier)
+        inputs = inputs_required(product_recipe, multiplier)
 
-                
-            
+        print(f"Machine Count = {machine, multiplier}")
+        print(f"Power Usage = {power}")
+        print(f"Inputs Required = {inputs}")
 
+
+
+# ============================================================================================================= #
+# Calculation Methods
+# ============================================================================================================= #
+
+def machine_count(recipe, item_quantity):
+    machine = recipes[recipe]["machine"]
+    output = recipes[recipe]["output"]
+    multiplier = (item_quantity / output)
+    return machine, multiplier
+
+def power_usage(recipe, number_of_machines):
+    power = (recipes[recipe]["power"] * number_of_machines)
+    return power
+
+def inputs_required(recipe, number_of_machines):
+    input_list = []
+    x = 0
+    for material in recipes[recipe]["materials"]:
+        quantity = (recipes[recipe]["input"][x] * number_of_machines)
+        input_list.append((material, quantity))
+        x += 1
+    return input_list
+    
 
 main()

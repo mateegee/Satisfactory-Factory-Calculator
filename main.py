@@ -26,6 +26,22 @@ def clear():
     elif os == "Windows":
         subprocess.run("cls")
 
+def replace_alts(product_recipe, chosen_alt_recipes):
+    recipes_required = []
+    recipes_required.append(product_recipe)
+    for recipe in recipes_required:
+        recipe_materials = recipes[recipe]["materials"]
+        for material in recipe_materials:
+            for alt_recipe in chosen_alt_recipes:
+                if material in recipes_required or material in raw_inputs:
+                    continue
+                elif recipes[material]["output material"] == recipes[alt_recipe]["output material"]:
+                    recipes_required.append(alt_recipe)
+                    continue
+                else:
+                    recipes_required.append(material)
+    return recipes_required
+
 def main():
     while True:
         # This block makes the user select the recipe they wish to produce.
@@ -97,46 +113,27 @@ def main():
         #                 break
         
         # This block identifies all recipes required for the product recipe, including dependancies.
-        recipes_required = []
-        recipes_required.append(product_recipe)
-        print(type(items_per_minute))
-        for recipe in recipes_required:
-            print(recipes_required) #NOTE - debugging
-            recipe_materials = recipes[recipe]["materials"]
-            for material in recipe_materials:
-                for alt_recipe in chosen_alt_recipes:
-                    if material in recipes_required or material in raw_inputs:
-                        continue
-                    elif recipes[material]["output material"] == recipes[alt_recipe]["output material"]:
-                        recipes_required.append(alt_recipe)
-                        continue
-                    else:
-                        recipes_required.append(material)
-
-        machine, multiplier = machine_count(product_recipe, items_per_minute)
-        power = power_usage(product_recipe, multiplier)
-        inputs = inputs_required(product_recipe, multiplier)
-
-        print(f"Machine Count = {machine, multiplier}")
-        print(f"Power Usage = {power}")
-        print(f"Inputs Required = {inputs}")
-
+        test = replace_alts(product_recipe, chosen_alt_recipes)
+        print(test)
 
 
 # ============================================================================================================= #
 # Calculation Methods
 # ============================================================================================================= #
 
-def machine_count(recipe, item_quantity):
-    machine = recipes[recipe]["machine"]
+# Calculates how many machines are required for a recipe, using user's inputted number of required items per minute.
+def machine_count(recipe, item_quantity): 
+    machine = recipes[recipe]["machine"]  
     output = recipes[recipe]["output"]
     multiplier = (item_quantity / output)
     return machine, multiplier
 
+# Calculates power usage, using the multiplier from "machine_count()"
 def power_usage(recipe, number_of_machines):
     power = (recipes[recipe]["power"] * number_of_machines)
     return power
 
+# Calculates total input quantity required, using the multiplier from "machine_count()"
 def inputs_required(recipe, number_of_machines):
     input_list = []
     x = 0
@@ -145,6 +142,11 @@ def inputs_required(recipe, number_of_machines):
         input_list.append((material, quantity))
         x += 1
     return input_list
+
+# Calculates total output quantity, using the multiplier from "machine_count()"
+def output_quantity(recipe, number_of_machines):
+    quantity = (recipes[recipe]["output"] * number_of_machines)
+    return quantity
     
 
 main()

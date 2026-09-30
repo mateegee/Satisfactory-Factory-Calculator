@@ -26,6 +26,7 @@ def clear():
     elif os == "Windows":
         subprocess.run("cls")
 
+# Identifies all recipes required for the product recipe, including dependancies.
 def replace_alts(product_recipe, chosen_alt_recipes):
     recipes_required = []
     recipes_required.append(product_recipe)
@@ -41,6 +42,27 @@ def replace_alts(product_recipe, chosen_alt_recipes):
                 else:
                     recipes_required.append(material)
     return recipes_required
+
+# Adds final data numbers, after calculations, to a dictionary, which is used for the final report.
+def recipe_report(recipe, machine, multiplier, inputs, outputs, power):
+    GREEN = "\033[92m"
+    RED = "\033[91m"
+    RESET = "\033[0m"
+
+    print(f"{GREEN}={RESET}" * 60)
+    print(f"{GREEN}{recipe:^60}{RESET}")
+    print(f"{GREEN}{'=' * 60}{RESET}")
+    print("\n")
+
+    print("MACHINES REQUIRED")
+    print(f" {machine:<26}{multiplier:>10}")
+    print("INPUTS REQUIRED")
+    for item, quantity in inputs:
+        print(f"{GREEN} {item:<25}{quantity:>10}{RESET}")
+    print("OUTPUT QUANTITY")
+    print(f"{RED} {outputs:<25}{recipes[recipe]['output material']:>10}{RESET}")
+    print(f"{'POWER USAGE':<26}{power:>10}")
+    
 
 def main():
     while True:
@@ -85,37 +107,35 @@ def main():
                 print("Recipe is not an alternate recipe.")
             else:
                 chosen_alt_recipes.append(alt_recipe)
-
-        # This block makes the user input raw inputs and their quantities. Currently not used, may be deleted.
-        # while True:
-        #     print("Choose a raw material input. If there are no more raw inputs, press Enter.\nCurrent inputs:\n")
-        #     for material, quantity in raw_materials.items():
-        #         print(f"{quantity} {material} per minute.")
-        #     raw_input = input("\n").title()
-        #     if raw_input == "":
-        #         clear()
-        #         break
-        #     elif raw_input not in raw_inputs:
-        #         clear()
-        #         print("Raw input does not exist.")
-        #     else:
-        #         clear()
-        #         while True: # Start of input quanitity user input.
-        #             raw_input_quantity = input(f"How many {raw_input} do you have per minute?\n")
-        #             try:
-        #                 float(raw_input_quantity)
-        #             except ValueError:
-        #                 clear()
-        #                 print("Please enter a numerical value.")
-        #             else:
-        #                 raw_materials[raw_input] = raw_input_quantity
-        #                 clear()
-        #                 break
         
-        # This block identifies all recipes required for the product recipe, including dependancies.
-        test = replace_alts(product_recipe, chosen_alt_recipes)
-        print(test)
+        recipes_required = replace_alts(product_recipe, chosen_alt_recipes)
 
+        # ===================================== Recipe Calculations ============================================== #
+        recipes_manufactured = []
+        recipes_manufactured.append(product_recipe)
+        print(recipes_required)
+
+        while len(recipes_manufactured) > 0:
+            item = recipes_manufactured[0]
+            for recipe in recipes_required:
+                if item in recipes_required or item in raw_inputs:
+                    continue
+                elif recipes[item]["output material"] == recipes[recipe]["output material"]:
+                    recipes_manufactured.append(recipe)
+                    recipes_manufactured.pop(0)
+
+            if item in raw_inputs:
+                recipes_manufactured.pop(0)
+                continue
+            else:
+                machine, multiplier = machine_count(item, items_per_minute)
+                power = power_usage(item, multiplier)
+                input_quantity = inputs_required(item, multiplier)
+                output = output_quantity(item, multiplier)
+                recipes_manufactured.extend(recipes[item]["materials"])
+                recipe_report(item, machine, multiplier, input_quantity, output, power)
+                recipes_manufactured.pop(0)
+        
 
 # ============================================================================================================= #
 # Calculation Methods
@@ -129,23 +149,23 @@ def machine_count(recipe, item_quantity):
     return machine, multiplier
 
 # Calculates power usage, using the multiplier from "machine_count()"
-def power_usage(recipe, number_of_machines):
-    power = (recipes[recipe]["power"] * number_of_machines)
+def power_usage(recipe, multiplier):
+    power = (recipes[recipe]["power"] * multiplier)
     return power
 
 # Calculates total input quantity required, using the multiplier from "machine_count()"
-def inputs_required(recipe, number_of_machines):
+def inputs_required(recipe, multiplier):
     input_list = []
     x = 0
     for material in recipes[recipe]["materials"]:
-        quantity = (recipes[recipe]["input"][x] * number_of_machines)
+        quantity = (recipes[recipe]["input"][x] * multiplier)
         input_list.append((material, quantity))
         x += 1
     return input_list
 
 # Calculates total output quantity, using the multiplier from "machine_count()"
-def output_quantity(recipe, number_of_machines):
-    quantity = (recipes[recipe]["output"] * number_of_machines)
+def output_quantity(recipe, multiplier):
+    quantity = (recipes[recipe]["output"] * multiplier)
     return quantity
     
 
